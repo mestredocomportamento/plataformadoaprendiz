@@ -1,0 +1,31 @@
+graph TD
+    subgraph Cliente["📱 Cliente Mobile"]
+        A["React Native / Expo<br/>Expo Router"]
+    end
+
+    subgraph Supabase["☁️ Supabase Backend"]
+        B["Supabase Auth<br/>(JWT)"]
+        C["PostgreSQL<br/>(Banco de Dados)"]
+        D["Supabase Realtime<br/>(WebSockets)"]
+        E["Supabase Storage<br/>(Arquivos/Mídia)"]
+        F["Edge Functions<br/>(Deno/TypeScript)"]
+        V["Supabase Vault<br/>(Secrets)"]
+        CR["pg_cron<br/>(Agendador)"]
+    end
+
+    subgraph Externos["🔗 Serviços Externos"]
+        G["Google Drive API"]
+        H["Notion API"]
+    end
+
+    A -->|"Login/Cadastro"| B
+    A -->|"CRUD Dados"| C
+    A -->|"Escuta Mensagens"| D
+    A -->|"Upload Mídia"| E
+    B -->|"Gera JWT"| A
+    C -->|"Postgres Changes"| D
+    CR -->|"Invoca 2x/dia"| F
+    F -->|"Lê Mensagens"| C
+    F -->|"Lê Secrets"| V
+    F -->|"Exporta Conversas"| G
+    F -->|"Exporta Conversas"| H

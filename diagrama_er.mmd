@@ -1,0 +1,61 @@
+erDiagram
+    auth_users ||--|| profiles : "cria perfil"
+    profiles ||--o{ group_members : "participa"
+    profiles ||--o{ messages : "envia"
+    profiles ||--o{ chat_groups : "cria"
+    profiles ||--o{ backup_configs : "configura"
+    chat_groups ||--o{ group_members : "contém"
+    chat_groups ||--o{ messages : "recebe"
+    chat_groups ||--o{ backup_configs : "é backupeado"
+
+    profiles {
+        uuid id PK
+        text username
+        text full_name
+        text avatar_url
+        text role
+        text phone
+        text email
+        text service_type
+        timestamptz created_at
+        timestamptz updated_at
+    }
+
+    chat_groups {
+        uuid id PK
+        text name
+        text description
+        uuid created_by FK
+        boolean is_private
+        text group_type
+        timestamptz created_at
+    }
+
+    group_members {
+        uuid group_id PK_FK
+        uuid user_id PK_FK
+        text role
+        timestamptz joined_at
+    }
+
+    messages {
+        bigint id PK
+        uuid group_id FK
+        uuid user_id FK
+        text content
+        text media_url
+        text media_type
+        boolean is_read
+        timestamptz created_at
+    }
+
+    backup_configs {
+        uuid id PK
+        uuid group_id FK
+        uuid user_id FK
+        uuid owner_id FK
+        boolean backup_google_drive
+        boolean backup_notion
+        text last_backup_at
+        boolean is_active
+    }
